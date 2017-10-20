@@ -1,7 +1,6 @@
 **NIAMBIE V1.1**
 
-**Is an Excel Vba application that helps Accountants **
-**reconcile large supplier or customer data sets. **
+**Is an Excel Vba application that helps Accountants reconcile large supplier or customer data sets** 
 
 Sub reconcile()
       
@@ -54,12 +53,11 @@ End Sub
 
 **Procedure to match invoice numbers and amounts**
 
-
 Sub match_references_and_amounts()
 
- Dim i, j, k, lrow_our_ledger, lrow_sup_invoices_reconciled, amount,
- inv_no, lrow_supplier_stmnt, lrow_pricediff_ourside, 
- lrow_pricediff_supp_side, lrow_reconciled As Long
+    Dim i, j, k, lrow_our_ledger, lrow_sup_invoices_reconciled, amount,
+    inv_no, lrow_supplier_stmnt, lrow_pricediff_ourside, 
+    lrow_pricediff_supp_side, lrow_reconciled As Long
  
        Dim sPercentage As Single
        Dim sStatus As String
@@ -215,8 +213,8 @@ Sub move_amounts_with_differences()
      
      'copy price differences from one worksheet to another
      
-     Sheets("pricediff_supp_side").Range("A2:E" & lrow_pricediff_supp_side).Cut   Destination:=Worksheets("price_differences").Range("F4")
-     Sheets("pricediff_our_side").Range("A2:E" & lrow_pricediff_ourside).Cut Destination:=Worksheets("price_differences").Range("A4")
+     Sheets("pricediff_supp_side").Range("A2:E" & lrow_pricediff_supp_side).Cut _   Destination:=Worksheets("price_differences").Range("F4")
+     Sheets("pricediff_our_side").Range("A2:E" & lrow_pricediff_ourside).Cut  Destination:=Worksheets("price_differences").Range("A4")
 
 End Sub
 
@@ -239,7 +237,8 @@ Sub calculate_differences_in_amount()
            
            .Range("K" & i).Value = .Range("I" & i).Value - .Range("D" & i).Value
             
-            'Check for negatives
+   'Check for negatives
+    
             If .Cells(i, 11).Value < 0 Then
               'Store as undercharge and set font color to none
               
@@ -256,9 +255,9 @@ Sub calculate_differences_in_amount()
             
          Next i
          
-       'Format column 11 as accounting
-        .Columns(11).NumberFormat = "#,##0.00"
-     End With
+             'Format column 11 as accounting
+              .Columns(11).NumberFormat = "#,##0.00"
+       End With
 
 End Sub
 
@@ -268,92 +267,95 @@ Sub calculate_totals_and_move_torecon()
 
    'loop through unreceived and calculate total
 
-    Dim total_unreceived, total_unclaimed, total_overcharge,
-    total_undercharge, _total_remitance, total_supp_stmnt, 
-    total_pricediff_ourledger, total_pricediff_supplier As Long
+       Dim total_unreceived, total_unclaimed, total_overcharge,
+       total_undercharge, _total_remitance, total_supp_stmnt, 
+       total_pricediff_ourledger, total_pricediff_supplier As Long
    
    'Find the last row that contains data.in column A
    
-    With Worksheets("unreceived")
-       lrow_unreceived = .Cells(.Rows.Count, "D").End(xlUp).Row
-    End With
+       With Worksheets("unreceived")
+         lrow_unreceived = .Cells(.Rows.Count, "D").End(xlUp).Row
+       End With
     
     'calculate the total of unreceived invoices
     
-    total_unreceived = Application.WorksheetFunction.
-    Sum(Sheets("unreceived").Range("D2:D" & lrow_unreceived))
+         total_unreceived = Application.WorksheetFunction.
+         Sum(Sheets("unreceived").Range("D2:D" & lrow_unreceived))
     
     'take the total value computed to cell g17
     
-    Sheets("RECON").Range("G17").Value = total_unreceived
+        Sheets("RECON").Range("G17").Value = total_unreceived
     
    'Find the last row that contains data.in column A
    
-    With Worksheets("unclaimed")
-       lrow_unclaimed = .Cells(.Rows.Count, "D").End(xlUp).Row
-    End With
+        With Worksheets("unclaimed")
+            lrow_unclaimed = .Cells(.Rows.Count, "D").End(xlUp).Row
+        End With
     
     'calculate the total of unclaimed invoices
     
-    total_unclaimed = Application.WorksheetFunction.
-    Sum(Sheets("unclaimed").Range("D2:D" & lrow_unclaimed))
+        total_unclaimed = Application.WorksheetFunction.
+        Sum(Sheets("unclaimed").Range("D2:D" & lrow_unclaimed))
     
     'take the total value computed to cell n17
-    Sheets("RECON").Range("N17").Value = total_unclaimed
+    
+        Sheets("RECON").Range("N17").Value = total_unclaimed
     
     'Find the last row that contains data.in column A
     
-    With Worksheets("price_differences")
-       lrow_pricediff = .Cells(.Rows.Count, "A").End(xlUp).Row
-    End With
+        With Worksheets("price_differences")
+            lrow_pricediff = .Cells(.Rows.Count, "A").End(xlUp).Row
+        End With
      
      'compute the total of overcharged invoices only
      
-     total_overcharge = Application.WorksheetFunction.
-     SumIf(Sheets("price_differences").Range("L4:L" & lrow_pricediff), _
-     "overcharge", Sheets("price_differences").Range("K4:K" & lrow_pricediff))
-     
+         total_overcharge = Application.WorksheetFunction. _
+           SumIf(Sheets("price_differences").Range("L4:L" & lrow_pricediff), _
+           "overcharge", Sheets("price_differences").Range("K4:K" & lrow_pricediff))
+
      'take the value computed above to cell g18
-     Sheets("RECON").Range("G18").Value = total_overcharge
+     
+         Sheets("RECON").Range("G18").Value = total_overcharge
    
     'compute the total of undercharged invoices only
     
-    total_undercharge = Application.WorksheetFunction.
-    SumIf(Sheets("price_differences").Range("L4:L" & lrow_pricediff), _
-    "undercharge", Sheets("price_differences").Range("K4:K" & lrow_pricediff))
+         total_undercharge = Application.WorksheetFunction._
+          SumIf(Sheets("price_differences").Range("L4:L" & lrow_pricediff), _
+          "undercharge", Sheets("price_differences").Range("K4:K" & lrow_pricediff))
     
    'take the value computed above to cell g12
-    Sheets("RECON").Range("G12").Value = total_undercharge
+    
+        Sheets("RECON").Range("G12").Value = total_undercharge
     
    'compute the total of invoices with price differences on ourledger
    
-   total_pricediff_ourledger = Application.WorksheetFunction.
-   Sum(Sheets("price_differences").Range("D4:D" & lrow_pricediff))
+       total_pricediff_ourledger = Application.WorksheetFunction. _
+         Sum(Sheets("price_differences").Range("D4:D" & lrow_pricediff))
    
    'compute the total of invoices with price differences on supplier side
    
-   total_pricediff_supplier = Application.WorksheetFunction.
-   Sum(Sheets("price_differences").Range("I4:I" & lrow_pricediff))
+       total_pricediff_supplier = Application.WorksheetFunction. _
+        Sum(Sheets("price_differences").Range("I4:I" & lrow_pricediff))
    
  'Find the last row that contains data.in column A
-   With Worksheets("reconciled_invoices_our_side")
-       lrow_recon_ourside = .Cells(.Rows.Count, "A").End(xlUp).Row
-    End With
+ 
+       With Worksheets("reconciled_invoices_our_side")
+            lrow_recon_ourside = .Cells(.Rows.Count, "A").End(xlUp).Row
+       End With
+    
    'find the total of amount in the worksheet
    
-   total_remitance = Application.WorksheetFunction.
-   Sum(Sheets("reconciled_invoices_our_side").Range("D2:D" & lrow_recon_ourside))
+       total_remitance = Application.WorksheetFunction. _
+         Sum(Sheets("reconciled_invoices_our_side").Range("D2:D" & lrow_recon_ourside))
    
    'Update balance per supplier side cell O8
    
-    Sheets("RECON").Range("O8").Value = total_remitance + 
-    total_unclaimed + total_pricediff_ourledger
+       Sheets("RECON").Range("O8").Value = total_remitance + _
+        total_unclaimed + total_pricediff_ourledger
     
-    Sheets("RECON").Range("H8").Value = total_remitance + 
-    total_unreceived + total_pricediff_supplier
-    
-    
-    
+       Sheets("RECON").Range("H8").Value = total_remitance + _
+        total_unreceived + total_pricediff_supplier
+     
 End Sub
 
 
@@ -361,24 +363,26 @@ Sub refresh()
 
   'Sub to delete data on the worksheet when the workbook opens
   
-    Dim sht As Worksheet
+      Dim sht As Worksheet
+    
     'cycle through every worksheet in this workbook
     
-    For Each sht In ThisWorkbook.Sheets
-        'Check if the worksheet name is RECON
-        If sht.Name <> "RECON" Then
-          'Clear all content if the worksheet is not RECON
-          sht.UsedRange.ClearContents
-        End If
-        
-    Next sht
+          For Each sht In ThisWorkbook.Sheets
+              'Check if the worksheet name is RECON
+              If sht.Name <> "RECON" Then
+                'Clear all content if the worksheet is not RECON
+                sht.UsedRange.ClearContents
+              End If
+
+          Next sht
     
     'Enable the reconcile,reconcile and ledger button
-     With Worksheets("MENU")
-         '.cmd_reconcile.Enabled = True
-         .cmd_ledger.Enabled = True
-         .cmd_stmnt.Enabled = True
-     End With
+     
+           With Worksheets("MENU")
+               '.cmd_reconcile.Enabled = True
+               .cmd_ledger.Enabled = True
+               .cmd_stmnt.Enabled = True
+           End With
 
 End Sub
 
