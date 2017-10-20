@@ -51,13 +51,14 @@ Sub reconcile()
     
 End Sub
 
-'Procedure to match invoice numbers and amounts
+
+**Procedure to match invoice numbers and amounts**
+
+
 Sub match_references_and_amounts()
- 
-       Dim i, j, k, lrow_our_ledger, lrow_sup_invoices_reconciled, amount, inv_no, lrow_supplier_stmnt, lrow_pricediff_ourside, lrow_pricediff_supp_side, lrow_reconciled As Long
+ Dim i, j, k, lrow_our_ledger, lrow_sup_invoices_reconciled, amount, inv_no, lrow_supplier_stmnt, lrow_pricediff_ourside, lrow_pricediff_supp_side, lrow_reconciled As Long
        Dim sPercentage As Single
        Dim sStatus As String
-       
         'Find the last row that contains data.in column A
        With Worksheets("our_ledger")
           lrow_our_ledger = .Cells(.Rows.Count, "A").End(xlUp).Row
@@ -91,8 +92,8 @@ Sub match_references_and_amounts()
         
        'cycle through every row in our ledger upto to the last cell with data
         For i = 2 To lrow_our_ledger
-                
              'Grab values from the reference/inv_no column and amount
+             
               inv_no = Worksheets("our_ledger").Cells(i, 1)
               amount = Worksheets("our_ledger").Cells(i, 4)
               
@@ -100,8 +101,7 @@ Sub match_references_and_amounts()
               For k = 2 To lrow_supplier_stmnt
                 
                 'Check if the inv_number and amount matches
-                If Worksheets("supplier_stmt").Cells(k, 1) = inv_no And Worksheets("supplier_stmt").Cells(k, 4) = amount Then
-                    
+                If Worksheets("supplier_stmt").Cells(k, 1) = inv_no And Worksheets("supplier_stmt").Cells(k, 4) = amount Then                    
                     'Cut and paste matched values to respective worksheets
                      Worksheets("our_ledger").Rows(i).Cut Destination:=Worksheets("reconciled_invoices_our_side").Range("A" & lrow_reconciled)
                      lrow_reconciled = lrow_reconciled + 1
@@ -111,7 +111,6 @@ Sub match_references_and_amounts()
                       Exit For
                  'If invoice matches and amount does not cut and paste the data to respective sheets
                   ElseIf Worksheets("supplier_stmt").Cells(k, 1) = inv_no And Worksheets("supplier_stmt").Cells(k, 4) <> amount Then
-    
                       Worksheets("our_ledger").Rows(i).Cut Destination:=Worksheets("pricediff_our_side").Range("A" & lrow_pricediff_ourside)
                       lrow_pricediff_ourside = lrow_pricediff_ourside + 1
     
@@ -163,6 +162,7 @@ Sub sort_columns()
     
 End Sub
 
+
 Sub move_amounts_with_differences()
     'first row number where you need to paste  values'
         With Worksheets("pricediff_our_side")
@@ -181,9 +181,9 @@ Sub move_amounts_with_differences()
 End Sub
 
 
-'Procedure to compute differences in amount
-Sub calculate_differences_in_amount()
+**Procedure to compute differences in amount**
 
+Sub calculate_differences_in_amount()
     Dim i As Integer
     Dim lrow_in_pricediff  As Long
     
