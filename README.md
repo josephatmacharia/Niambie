@@ -1,7 +1,7 @@
-NIAMBIE V1.1
+**NIAMBIE V1.1**
 
-Is an Excel Vba application that helps Accountants 
-reconcile large supplier or customer data sets. 
+**Is an Excel Vba application that helps Accountants 
+reconcile large supplier or customer data sets. **
 
 Sub reconcile()
       
@@ -56,7 +56,9 @@ End Sub
 
 
 Sub match_references_and_amounts()
+
  Dim i, j, k, lrow_our_ledger, lrow_sup_invoices_reconciled, amount, inv_no, lrow_supplier_stmnt, lrow_pricediff_ourside, lrow_pricediff_supp_side, lrow_reconciled As Long
+ 
        Dim sPercentage As Single
        Dim sStatus As String
         'Find the last row that contains data.in column A
@@ -139,7 +141,8 @@ Sub match_references_and_amounts()
             'Application.StatusBar = False
 End Sub
 
-'Sort columns
+**Sort columns**
+
 Sub sort_columns()
      Dim i, j, lrow_our_ledger, lrow_supplier_stmnt, lrow_reconciled As Long
      
@@ -154,6 +157,7 @@ Sub sort_columns()
      End With
      
      'sort both our_ledger and supplier statement and transfer values to unreceived and unclaimed ledgers respectively
+     
      Sheets("our_ledger").Range("A2:D" & lrow_our_ledger).Sort key1:=Sheets("our_ledger").Range("A2:A" & lrow_our_ledger), order1:=xlAscending, Header:=xlNo
      Sheets("our_ledger").Range("A2:D" & lrow_our_ledger).Cut Destination:=Worksheets("unclaimed").Range("A2")
     
@@ -163,7 +167,9 @@ Sub sort_columns()
 End Sub
 
 
+
 Sub move_amounts_with_differences()
+
     'first row number where you need to paste  values'
         With Worksheets("pricediff_our_side")
             lrow_pricediff_ourside = .Cells(.Rows.Count, "A").End(xlUp).Row + 1
@@ -184,6 +190,7 @@ End Sub
 **Procedure to compute differences in amount**
 
 Sub calculate_differences_in_amount()
+
     Dim i As Integer
     Dim lrow_in_pricediff  As Long
     
@@ -220,17 +227,22 @@ End Sub
 
 
 Sub calculate_totals_and_move_torecon()
+
    'loop through unreceived and calculate total
+   
     Dim total_unreceived, total_unclaimed, total_overcharge, total_undercharge, _
      total_remitance, total_supp_stmnt, total_pricediff_ourledger, total_pricediff_supplier As Long
    
    'Find the last row that contains data.in column A
+   
     With Worksheets("unreceived")
        lrow_unreceived = .Cells(.Rows.Count, "D").End(xlUp).Row
     End With
     'calculate the total of unreceived invoices
+    
     total_unreceived = Application.WorksheetFunction.Sum(Sheets("unreceived").Range("D2:D" & lrow_unreceived))
     'take the total value computed to cell g17
+    
     Sheets("RECON").Range("G17").Value = total_unreceived
     
    'Find the last row that contains data.in column A
@@ -239,42 +251,55 @@ Sub calculate_totals_and_move_torecon()
     End With
     
     'calculate the total of unclaimed invoices
+    
     total_unclaimed = Application.WorksheetFunction.Sum(Sheets("unclaimed").Range("D2:D" & lrow_unclaimed))
+    
     'take the total value computed to cell n17
     Sheets("RECON").Range("N17").Value = total_unclaimed
     
     'Find the last row that contains data.in column A
+    
     With Worksheets("price_differences")
        lrow_pricediff = .Cells(.Rows.Count, "A").End(xlUp).Row
     End With
      
      
      'compute the total of overcharged invoices only
+     
      total_overcharge = Application.WorksheetFunction.SumIf(Sheets("price_differences").Range("L4:L" & lrow_pricediff), _
      "overcharge", Sheets("price_differences").Range("K4:K" & lrow_pricediff))
+     
      'take the value computed above to cell g18
      Sheets("RECON").Range("G18").Value = total_overcharge
    
     'compute the total of undercharged invoices only
+    
     total_undercharge = Application.WorksheetFunction.SumIf(Sheets("price_differences").Range("L4:L" & lrow_pricediff), _
     "undercharge", Sheets("price_differences").Range("K4:K" & lrow_pricediff))
+    
    'take the value computed above to cell g12
     Sheets("RECON").Range("G12").Value = total_undercharge
     
    'compute the total of invoices with price differences on ourledger
+   
    total_pricediff_ourledger = Application.WorksheetFunction.Sum(Sheets("price_differences").Range("D4:D" & lrow_pricediff))
+   
    'compute the total of invoices with price differences on supplier side
+   
    total_pricediff_supplier = Application.WorksheetFunction.Sum(Sheets("price_differences").Range("I4:I" & lrow_pricediff))
    
  'Find the last row that contains data.in column A
+ 
    With Worksheets("reconciled_invoices_our_side")
        lrow_recon_ourside = .Cells(.Rows.Count, "A").End(xlUp).Row
     End With
    'find the total of amount in the worksheet
+   
    total_remitance = Application.WorksheetFunction.Sum(Sheets("reconciled_invoices_our_side").Range("D2:D" & lrow_recon_ourside))
    
    
    'Update balance per supplier side cell O8
+   
     Sheets("RECON").Range("O8").Value = total_remitance + total_unclaimed + total_pricediff_ourledger
     Sheets("RECON").Range("H8").Value = total_remitance + total_unreceived + total_pricediff_supplier
     
@@ -284,9 +309,12 @@ End Sub
 
 
 Sub refresh()
+
   'Sub to delete data on the worksheet when the workbook opens
+  
     Dim sht As Worksheet
     'cycle through every worksheet in this workbook
+    
     For Each sht In ThisWorkbook.Sheets
         'Check if the worksheet name is RECON
         If sht.Name <> "RECON" Then
